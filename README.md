@@ -62,10 +62,12 @@ these steps:
     | Run `rails server` to start the server 	| Run <br>`rails server -b 0.0.0.0`<br> to start the server 	|
 
 **Q1.1.**  What is the goal of running `bundle install`?
+**A:** Install all the dependencies
 
 **Q1.2.**  Why is it good practice to specify `--without production`
 when running 
 it on your development computer?
+**A:** Because you avoid installing gems you will not use while developing the application
 
 **Q1.3.** 
 (For most Rails apps you'd also have to create and seed the development
@@ -94,33 +96,44 @@ tasks is slightly different between Sinatra and Rails.
 
 **Q2.1.** Where in the Rails app directory structure is the code corresponding
 to the `WordGuesserGame` model?
+**A:** `./app/models/wordguesser_game.rb`
 
 **Q2.2.** In what file is the code that most closely corresponds to the 
 logic in the Sinatra apps' `app.rb` file that handles incoming user
 actions?
+**A:** `game_controller.rb`
 
 **Q2.3.** What class contains that code?
+**A:** `GameController`
 
 **Q2.4.** From what other class (which is part of the Rails framework)
-does that class inherit? 
+does that class inherit?
+**A:** `ApplicationController`
 
 **Q2.5.** In what directory is the code corresponding to the Sinatra app's views
-(`new.erb`, `show.erb`, etc.)?  
+(`new.erb`, `show.erb`, etc.)?
+**A:** `./app/views`
 
 **Q2.6.** The filename suffixes
 for these views are different in Rails than they were in the Sinatra
 app.  What information does the rightmost suffix of the filename 
 (e.g.: in `foobar.abc.xyz`, the suffix `.xyz`) tell
-you about the file contents?  
+you about the file contents?
+**A:** It tells Rails to process the Ruby code in the file 
 
 **Q2.7.** What information does the  other suffix tell you about what
 Rails is being asked to do with the file?
+**A:** The other suffix tells Rails to generate an HTML page 
+with contents dynamically added after processing the Ruby code
 
 **Q2.8.** In what file is the information in the Rails app that maps
 routes (e.g. `GET /new`)  to controller actions?  
+**A:** `./config/routes.rb`
 
 **Q2.9.** What is the role of the `:as => 'name'` option in the route
 declarations of `config/routes.rb`?  (Hint: look at the views.)
+**A:** This option will allow the automatic creation of helper 
+methods like 'name'_path that returns a specific URI
 
 ## 3. Session
 
@@ -132,6 +145,9 @@ game is replaced in the session after each action completes.
 are used for session management.  What is the closest equivalent in this
 Rails app, and in what
 file do we find the code that does it?
+**A:** In this app this is done using the `before_action :get_game_from_session` 
+and `after_action  :store_game_in_session` filter methods. 
+They are located in `app/controllers/game_controller.rb`
 
 **Q3.2.** A popular serialization format for exchanging data between Web
 apps is [JSON](https://en.wikipedia.org/wiki/JSON).  Why wouldn't it
@@ -142,6 +158,8 @@ restart your browser with a new Incognito/Private Browsing window, in
 order to clear out the `session[]`.  Based on the error messages you get
 when trying to use JSON serialization, you should be able to explain why
 YAML serialization works in this case but JSON doesn't.)
+**A:** The game and its methods wouldn't be loaded since the JSON and YAML
+syntaxes are different.
 
 ## 4. Views
 
@@ -151,20 +169,30 @@ redirect the player to another action, or `erb` to render a view.  Why
 are there no explicit calls corresponding to `erb` in the Rails version?
 (Hint: Based on the code in the app, can you discern the
 Convention-over-Configuration rule that is at work here?)
+**A:** Controller actions do not return a value; instead, when a 
+controller action finishes executing, by default Rails will identify and render 
+a view named `app/views/model-name/action.html.erb`, for example `app/views/game/show.html.erb`
+for the show action in GameController
 
 **Q4.2.** In the Sinatra version, we directly coded an HTML form using the
 `<form>` tag, whereas in the Rails version we are using a Rails method
 `form_tag`, even though it would be perfectly legal to use raw HTML
 `<form>` tags in Rails.  Can you think of a reason Rails might introduce
 this "level of indirection"?
+**A:** If you use Rails form helpers, the field names are chosen such that
+params[:model] is a hash whose keys and values are the user-supplied values for
+an instance of model.
 
 **Q4.3.** How are form elements such as text fields and buttons handled in
 Rails?  (Again, raw HTML would be legal, but what's the motivation
 behind the way Rails does it?)
+**A:** By using form helpers to define fields it becomes easier to parse
+the parameters needed by the action.
 
 **Q4.4.** In the Sinatra version, the `show`, `win` and `lose` views re-use the
 code in the `new` view that offers a button for starting a new game.
 What Rails mechanism allows those views to be re-used in the Rails version?  
+**A:** The `render` method.
 
 ## 5. Cucumber scenarios
 
@@ -180,4 +208,6 @@ Verify the Cucumber scenarios run and pass by running `rake cucumber`.
 **Q5.1.** What is a qualitative explanation for why the Cucumber scenarios and
 step definitions didn't need to be modified at all to work equally well
 with the Sinatra or Rails versions of the app?
+**A:** Because the logic behind the apps is the same, they have the same pages
+with the same elements with the same behaviors.
 

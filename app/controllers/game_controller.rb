@@ -1,3 +1,5 @@
+require './app/models/wordguesser_game' # needed for the cucumber tests
+
 class GameController < ApplicationController
 
   before_action :get_game_from_session
